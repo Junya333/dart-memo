@@ -33,8 +33,8 @@ int? lineCount  // これはOK
 assert(lineCount == null);  // nullで初期化されている
 ```
 
-ちなみに、、、
-開発中は、assert が false なら exception を投げる。
+ちなみに、、、  
+開発中は、assert が false なら exception を投げる。  
 production code なら assert は無視される。
 
 ### 初期化を伴わない non-nullable が許される場合
@@ -59,7 +59,7 @@ wiki の例を持ってきたが、これなら三項演算子を使ったほう
 
 ```dart
 void main() {
-  int lineCount = countEnabled? CountLines() : 0;
+  int lineCount = countEnabled ? CountLines() : 0;
   print(lineCount)
 }
 ```
@@ -77,7 +77,7 @@ void main() {
 
 便利な場合もあるが、`late`をつけておきながら初期化を忘れた場合は runtime error となってようやくわかるため、バグが埋もれやすいので注意する。
 
-`late`のついた変数は、宣言と同時の初期化を書いたとしても、変数が初めて使われる時に初期化が実行される。これは、以下のような時にうれしい
+`late`のついた変数は、宣言と同時の初期化を書いたとしても、変数が初めて使われる時に初期化が実行される。これは、以下のような時にうれしい:
 
 -   変数初期化の処理が重く、頑張って初期化しても使わないことがあるとき
 -   インスタンス変数を初期化しようとしていて、その initializer が`this`にアクセスしないといけないとき(どういうこと?)
@@ -85,7 +85,8 @@ void main() {
 ### const と final の使い方
 
 var の代わりか、型の前につける。
-const はコンパイル時に決定する定数、final は再代入を行わない変数に使える。つまり、final したオブジェクトが必ずしも変更できないわけではない。例えばこう
+const はコンパイル時に決定する定数、final は再代入を行わない変数に使える。つまり、final したオブジェクトが必ずしも変更できないわけではない。  
+例えばこう
 
 ```dart
 final name = 'Bob';
@@ -97,3 +98,55 @@ const pi = 3.141592;
 var radius = 5;
 print(radius * radius * pi);
 ```
+
+## Operator
+
+演算子の話。基本的なところは Python と同じ。
+`expr++`、`++expr`、`expr--`、`--expr`が使えるのと、三項演算子`cond ? expr1 : expr2`が使える点は一応あげておく。
+
+expression が null にならないことを、明示するときは、`expression!`とする
+
+他にも、`null`という特別なオブジェクトに対して`?`を使った表現が何個かある。
+
+```dart
+String playerName(String? name) => name ?? 'Guest';
+```
+
+補足: アロー構文で、return だけのメソッドを簡潔に記述できる。  
+これを使わないと、以下のクソ長コードを書くことになる。
+
+```dart
+String playerName(String? name) {
+  if (name != null) {
+    return name;
+  } else {
+    return 'Guest';
+  }
+}
+```
+
+### Type test operator (型テストのための演算子)
+
+実行時に型を確認するための演算子  
+`as` : 型がわかりきっている場合にのみ使う。違ったら error  
+`is` : 型が一致するかで true/false を返す。  
+`is!`: is の not
+
+### Assignment operator (代入演算子)
+
+`??=`で、「変数が null なら代入する」という処理ができる。
+
+```dart
+int? foo;
+int? bar = 1;
+
+foo ??= 2;
+bar ??= 2;  // barはnullでないので、変更されない
+
+print(foo)  // 2
+print(bar)  // 1
+```
+
+<!-- TODO: unsigned shiftってなに -->
+
+<!-- TODO: cascade notationってなに、null許容のやつも知りたい。可読性が下がりそうだなという感じ -->
