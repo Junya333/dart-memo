@@ -18,8 +18,7 @@ Object name = 'Junya333'
 name = 333  //  エラーにならない
 ```
 
-Dart は null 安全らしい。null に対してメソッドが実行される場合はコンパイルが通らない。
-被演算子として null が認められている`toString()`や`hashCode`などは大丈夫。
+Dart は null 安全らしい。静的解析で null に対してメソッドが実行されることがわかると、コンパイルが通らない。 被演算子として null が認められている`toString()`や`hashCode`などは大丈夫。
 挙動はこう。
 
 -   通常の変数宣言では、null を許容しない。null を認めるなら、T?とする
@@ -41,7 +40,6 @@ production code なら assert は無視される。
 ### 初期化を伴わない non-nullable が許される場合
 
 1. ローカル変数で、使用前に必ず初期化される場合
-   例えば以下。
 
 ```dart
 void main() {
