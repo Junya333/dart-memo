@@ -27,12 +27,12 @@ Dartはnull安全らしい。nullに対してメソッドが実行される場�
 ```dart
 // int height;  // この行は怒られる
 int height = 179  // これならOK
-int? lineCount  // これはOK 
+int? lineCount  // これはOK
 assert(lineCount == null);  // nullで初期化されている
 ```
 
 ちなみに、、、
-開発中は、assertがfalseならexceptionを投げる。  
+開発中は、assertがfalseならexceptionを投げる。
 production codeならassertは無視される。
 
 ### 初期化を伴わないnon-nullableが許される場合
@@ -78,3 +78,19 @@ void main() {
 `late`のついた変数は、宣言と同時の初期化を書いたとしても、変数が初めて使われる時に初期化が実行される。これは、以下のような時にうれしい
 - 変数初期化の処理が重く、頑張って初期化しても使わないことがあるとき
 - インスタンス変数を初期化しようとしていて、そのinitializerが`this`にアクセスしないといけないとき(どういうこと?)
+
+### constとfinalの存在
+
+varの代わりか、型の前につける。
+constはコンパイル時に決定する定数、finalは再代入を行わない変数に使える。つまり、finalしたオブジェクトが必ずしも変更できないわけではない。例えばこう
+
+```dart
+final name = 'Bob';
+final String nickname = 'Bobby';
+
+name = 'Alice';  // 再代入はできないのでerror
+
+const pi = 3.141592;
+var radius = 5;
+print(radius * radius * pi);
+```
